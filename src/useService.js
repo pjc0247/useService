@@ -1,14 +1,17 @@
 const services = {};
 let currentSubscription = null;
 const getService = (service) => {
-  const name = service.name;
-  return services[name];
+  let s = services[service];
+  if (!s) {
+    s = createService(service);
+    services[service] = s;
+  }
+  return s;
 };
 const createService = (service) => {
   const s = new service();
   const p = new Proxy(s, {
     get: (target, prop) => {
-      // TODO: build read-map
       if (prop !== '__subscribers') {
         currentSubscription.props[prop] = true;
       }
@@ -46,11 +49,7 @@ const useService = (service) => {
     render,
     props: {},
   });
-  let s = services[service.name];
-  if (!s) {
-    s = createService(service);
-    services[service.name] = s;
-  }
+  const s = getService(service);
 
   React.useEffect(() => {
     s.__subscribers.push(subscription.current);
