@@ -34,5 +34,17 @@ useComponentService
 ----
 use `useComponentService` in case that you want to control more than one instances.
 ```js
+// Get or create per-component service instance.
 const auth = useComponentService(AuthService);
+```
+
+getService
+----
+```js
+class PostService {
+  async write() {
+    const auth = getService(AuthService);
+    /* ... */
+  }
+}
 ```
