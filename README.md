@@ -48,3 +48,31 @@ class PostService {
   }
 }
 ```
+
+Error Handling
+----
+
+using __catch__
+
+````js
+const onClickLogin = async (id, pw) => {
+  try {
+    await auth.login(id, pw);
+  } catch(e) {
+    /* do something */
+  }
+};
+```
+
+using __useApi__
+
+```js
+const auth = useService(AuthService);
+const [login, loginResult, isFetching, error] = useApi(auth.login);
+
+return (
+  { isFetching && "Please wait..." }
+  { loginResult && "You are successfully logged in" }
+  { error && "Login failed" }
+);
+```
