@@ -1,5 +1,6 @@
 const services = {};
 let currentSubscription = null;
+
 const getService = (service) => {
   let s = services[service];
   if (!s) {
@@ -64,7 +65,7 @@ const useService = (service, name) => {
   const s = getService(service);
 
   React.useEffect(() => {
-    s.__subscribers.push(subscription.current);
+    s.__subscribers.unshift(subscription.current);
   }, [s]);
   React.useEffect(() => {
     currentSubscription = null;
