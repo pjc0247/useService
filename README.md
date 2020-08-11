@@ -54,7 +54,7 @@ Error Handling
 
 using __catch__
 
-````js
+```js
 const onClickLogin = async (id, pw) => {
   try {
     await auth.login(id, pw);
