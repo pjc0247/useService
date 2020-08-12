@@ -68,11 +68,15 @@ using __useApi__
 
 ```js
 const auth = useService(AuthService);
-const [login, loginResult, isFetching, error] = useApi(auth.login);
+const login = useApi(auth.login);
+
+const onClickLogin = (id, pw) => {
+  login.exec(id, pw);
+};
 
 return (
-  { isFetching && "Please wait..." }
-  { loginResult && "You are successfully logged in" }
-  { error && "Login failed" }
+  { login.isFetching && "Please wait..." }
+  { login.loginResult && "You are successfully logged in" }
+  { login.error && "Login failed" }
 );
 ```
