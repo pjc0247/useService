@@ -71,7 +71,7 @@ const auth = useService(AuthService);
 const login = useApi(auth.login);
 
 const onClickLogin = (id, pw) => {
-  login.exec(id, pw);
+  login(id, pw);
 };
 
 return (
