@@ -11,10 +11,18 @@ const getService = (service) => {
 };
 const createService = (service) => {
   const s = new service();
+  const publishChange = (p, prop) => {
+    for (const subscriber of p.__subscribers) {
+      if (subscriber.props[prop]) {
+        subscriber.render();
+      }
+    }
+  };
   const p = new Proxy(s, {
     get: (target, prop) => {
       if (prop !== '__subscribers') {
-        currentSubscription.props[prop] = true;
+        if (currentSubscription)
+          currentSubscription.props[prop] = true;
       }
       const value = target[prop];
       if (typeof value === 'function') {
@@ -25,22 +33,63 @@ const createService = (service) => {
           currentSubscription = subscription;
           return ret;
         };
+      } else if (value && Array.isArray(value) && !value.__proxied) {
+        const wrapped = createObservedArray(value, () => {
+          publishChange(p, prop);
+        });
+        wrapped.__proxied = true;
+        p[prop] = wrapped;
       }
       return value;
     },
     set: (target, prop, newValue) => {
       target[prop] = newValue;
       if (prop !== '__subscribers') {
-        for (const subscriber of p.__subscribers) {
-          if (subscriber.props[prop]) {
-            subscriber.render();
-          }
-        }
+        publishChange(p, prop);
       }
       return newValue;
     },
   });
   p.__subscribers = [];
+  return p;
+};
+
+const createObservedArray = (ary, onChange) => {
+  const p = new Proxy(ary, {
+    get: (target, prop) => {
+      const value = target[prop];
+      if (typeof value === 'function') {
+        if (prop === 'push' || prop === 'unshift' || prop === 'pop') {
+          onChange();
+        }
+      }
+      return value;
+    },
+    set: (target, prop, value) => {
+      target[prop] = value;
+
+      if (!prop.startsWith('__'))
+        onChange(prop);
+      return value;
+    },
+  });
+  return p;
+};
+const createObservedObject = (obj, onChange) => {
+  const p = new Proxy(obj, {
+    set: (target, prop, value) => {
+      target[prop] = value;
+      if (!prop.startsWith('__'))
+        onChange(prop);
+      return value;
+    },
+    deleteProperty: (target, prop) => {
+      if (!prop.startsWith('__'))
+        onChange(prop);
+      delete target[prop];
+      return true;
+    },
+  });
   return p;
 };
 
@@ -50,10 +99,17 @@ const useRerender = () => {
 };
 const useComponentService = (service) => {
   const render = useRerender();
-  const instance = React.useMemo(() => {
+  const subscription = React.useRef({
+    render,
+    props: {},
+  });
+  const s = React.useMemo(() => { 
     return createService(service);
   }, [service]);
-  return instance;
+  React.useEffect(() => {
+    s.__subscribers= [subscription.current];
+  }, [s]);
+  return s;
 };
 const useService = (service, name) => {
   const render = useRerender();
@@ -74,29 +130,4 @@ const useService = (service, name) => {
   currentSubscription = subscription.current;
   currentSubscription.props = {};
   return s;
-};
-
-const useApi = (api) => {
-  const [value, setValue] = React.useState(null);
-  const [isFetching, setIsFetching] = React.useState(false);
-  const [error, setError] = React.useState(null);
-
-  const reset = () => {
-    setError(null);
-    setValue(null);
-    setIsFetching(true);
-  };
-  const run = async (...args) => {
-    try {
-      reset();
-      const v = await api(...args);
-      setValue(v);
-    } catch(e) {
-      setError(e);
-    } finally {
-      setIsFetching(false);
-    }
-  };
-
-  return [run, value, isFetching, error];
 };
