@@ -18,8 +18,7 @@ class TodoService {
 const TodoComponent = () => {
   auto todo = useService(TodoService);
   
-  const addTodo = (name) => {
-  };
+  const addTodo = (name) => todo.add(name);
 
   return (
     <ul>
