@@ -2,6 +2,11 @@ useService
 ====
 Reactjs service injection just like angular's.
 
+__Made for replacement of state management library__<br>
+This 100~ lines of code can replace your blahblah
+
+Overview
+----
 ```js
 class AuthService {
   get isLoggedIn() { return !isNil(this.token); }
