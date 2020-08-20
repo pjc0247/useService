@@ -91,13 +91,17 @@ return (
 
 변경 감지
 ----
+`useService`는 자동으로 각 컴포넌트가 어떤 property를 구독하는지에 대한 Map을 생성합니다.<br>
+이는 특정 프로퍼티가 변경되었을 때, 모든 컴포넌트를 다시 렌더링하는 대신 해당 프로퍼티를 사용하는 컴포넌트만 업데이트 할 수 있도록 해줍니다.
 
 ```js
 class UserService {
   changeNickname(newNickname) {
+    // 이 함수는 UserStatusComponent의 re-render를 실행하지 않습니다.
     this.nickname = newNickname;
   }
   setUserStatus(newStatus) {
+    // 같은 원리로, 이 함수는 UserProfileComponent re-render를 실행하지 않습니다.
     this.status = newStatus;
   }
 }
