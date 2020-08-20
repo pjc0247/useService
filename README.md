@@ -87,3 +87,44 @@ return (
   { login.error && "Login failed" }
 );
 ```
+
+
+변경 감지
+----
+
+```js
+class UserService {
+  changeNickname(newNickname) {
+    this.nickname = newNickname;
+  }
+  setUserStatus(newStatus) {
+    this.status = newStatus;
+  }
+}
+```
+```js
+const UserProfileComponent = () => {
+  const user = useService(UserService);
+  return (
+    <div>
+      Nickname: {user.nickname}
+    </div>
+  );
+};
+```
+```js
+const UserStatusComponent = () => {
+  const user = useService(UserService);
+  return (
+    <div>
+      Status: {user.status}
+      
+      <div>
+        Set As
+        <button onClick={() => use.setUserStatus('online')}> ONLINE </button>
+        <button onClick={() => use.setUserStatus('away')}> AWAY </button>
+      </div>
+    </div>
+  );
+};
+```
