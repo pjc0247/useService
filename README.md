@@ -141,7 +141,7 @@ const user = useService(UserService);
 const status = user.__peek('status');
 ```
 
-__주의__<
+__주의__<br>
 `__peek`은 1회성 동작이며, 컴포넌트 내에 다른 읽기 동작이 있을 경우 최종적으로는 해당 컴포넌트는 `status`를 구독하게 됩니다.
 ```js
 const user = useService(UserService);
