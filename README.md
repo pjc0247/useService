@@ -125,8 +125,8 @@ const UserStatusComponent = () => {
       
       <div>
         Set As
-        <button onClick={() => use.setUserStatus('online')}> ONLINE </button>
-        <button onClick={() => use.setUserStatus('away')}> AWAY </button>
+        <button onClick={() => user.setUserStatus('online')}> ONLINE </button>
+        <button onClick={() => user.setUserStatus('away')}> AWAY </button>
       </div>
     </div>
   );
