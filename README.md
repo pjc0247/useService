@@ -133,6 +133,21 @@ const UserStatusComponent = () => {
 };
 ```
 
+### 구독 갱신
+컴포넌트의 로컬 `state`에 따라서 구독하는 프로퍼티가 달라지는 경우가 있습니다.<br>
+이전에 구독했던 프로퍼티가 더 이상 필요하지 않을 수도 있고, 새로운 프로퍼티를 구독해야할 경우도 있습니다.<br>
+`useService`는 가장 마지막 렌더링 작업에서 요청된 프로퍼티들만을 기억하기 때문에 이러한 작업은 자동으로 처리됩니다.
+```js
+const Foo = () => {
+  const user = useService(UserService);
+  const [mode, setMode] = useState(0);
+  
+  if (mode === 0) return (<div>{user.nickname}</div>);
+  else if (mode === 1) return (<div>{user.status}</div>);
+  else return (<div>{user.createdAt}</div>);
+};
+```
+
 ### Peek
 
 만약 프로퍼티를 구독하고자 하는게 아니라, 단순히 읽고 싶으면 `__peek` 메소드를 사용합니다.
