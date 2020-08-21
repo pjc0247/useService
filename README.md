@@ -132,3 +132,23 @@ const UserStatusComponent = () => {
   );
 };
 ```
+
+Peek
+----
+
+만약 프로퍼티를 구독하고자 하는게 아니라, 단순히 읽고 싶으면 `__peek` 메소드를 사용합니다.
+```js
+const user = useService(UserService);
+const status = user.__peek('status');
+```
+
+__주의__
+`__peek`은 1회성 동작이며, 컴포넌트 내에 다른 읽기 동작이 있을 경우 최종적으로는 해당 컴포넌트는 `status`를 구독하게 됩니다.
+```js
+const user = useService(UserService);
+const status = user.__peek('status');
+
+return (
+  <div>{user.status}</div>
+)
+```
