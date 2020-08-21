@@ -16,7 +16,7 @@ class AuthService {
   async login() {
     const resp = await fetch(/* ... */);
     
-    // Below mutations automatically trigger component update
+    // Below mutations automatically trigger components update
     this.user = resp.user;
     this.token = resp.token;
   }
