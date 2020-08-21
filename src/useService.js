@@ -18,6 +18,15 @@ const createService = (service) => {
       }
     }
   };
+  const internalMethods = {
+    __peek: (selector) => {
+      const subscription = currentSubscription;
+      currentSubscription = { props: {} };
+      const v = selector();
+      currentSubscription = subscription;
+      return v;
+    }
+  };
   const p = new Proxy(s, {
     get: (target, prop) => {
       if (prop !== '__subscribers') {
@@ -26,6 +35,9 @@ const createService = (service) => {
       }
       const value = target[prop];
       if (typeof value === 'function') {
+        if (internalMethods[prop]) {
+          return internalMethods[prop];
+        }
         return (...args) => {
           const subscription = currentSubscription;
           currentSubscription = { props: {} };
