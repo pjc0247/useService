@@ -133,6 +133,30 @@ const UserStatusComponent = () => {
 };
 ```
 
+### 구독 시점
+`useService`는 오직 렌더링 과정에서 발생한 읽기 작업만 구독으로 간주합니다.<br>
+아래 코드에서 `isLoggedIn`과 `nickname`은 렌더링 이후에 발생할 작업들이기 때문에 해당 프로퍼티가 바뀌어도 컴포넌트가 다시 렌더링되지 않습니다.
+```js
+const AuthComponent = () => {
+  const user = useService(UserService);
+  
+  const onClickLogin = (id, pw) => {
+    if (user.isLoggedIn) return;
+    login(id, pw);
+  };
+  
+  useEffect(() => {
+    console.log(user.nickname);
+  }, []);
+  
+  return (
+    <div>
+      /* ... */
+    </div>
+  );
+};
+```
+
 ### 구독 갱신
 컴포넌트의 로컬 `state`에 따라서 구독하는 프로퍼티가 달라지는 경우가 있습니다.<br>
 이전에 구독했던 프로퍼티가 더 이상 필요하지 않을 수도 있고, 새로운 프로퍼티를 구독해야할 경우도 있습니다.<br>
