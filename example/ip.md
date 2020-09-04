@@ -1,3 +1,6 @@
+Ip
+----
+
 ```js
 class IpService {
   constructor() {
