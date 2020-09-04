@@ -1,6 +1,8 @@
 Ip
 ====
 
+This example demonstrates how to perform async operations using `useService`.
+
 ```js
 class IpService {
   constructor() {
