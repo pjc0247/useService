@@ -59,7 +59,7 @@ const createService = (service) => {
       if (prop !== '__subscribers') {
         publishChange(p, prop);
       }
-      return newValue;
+      return true;
     },
   });
   p.__subscribers = [];
