@@ -51,6 +51,10 @@ const createService = (service) => {
         });
         wrapped.__proxied = true;
         p[prop] = wrapped;
+      } else if (target.__lookupGetter__(prop)) {
+        const getter = target.__lookupGetter__(prop);
+        const ret = getter.bind(p)();
+        return ret;
       }
       return value;
     },
