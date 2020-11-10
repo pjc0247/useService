@@ -1,7 +1,7 @@
 useService
 ====
 
-<h1>[useService is not boo!](https://github.com/pjc0247/boo)</h1>
+<h1> [useService is now boo!](https://github.com/pjc0247/boo) </h1>
 
 [Example](https://pjc0247.github.io/useService/)<br>
 
